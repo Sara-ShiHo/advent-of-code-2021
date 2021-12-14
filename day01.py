@@ -1,3 +1,7 @@
+"""Intuition for Day 01:
+Calculate difference between the data starting from the second position and
+the data ending at the second-to-last position. Count the positive differences.
+"""
 from aocd import get_data
 from aocd.transforms import numbers
 from aocd import submit
@@ -10,6 +14,7 @@ raw_data = get_data(day=DAY, year=YEAR)
 data = numbers(raw_data)
 
 
+# general solution
 def count_increases(data):
     diff = [y - x for x, y in zip(data[:len(data)-1],
                                   data[1:])]
