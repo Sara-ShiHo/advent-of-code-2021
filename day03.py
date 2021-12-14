@@ -28,10 +28,10 @@ def solution(data, rate):
 
 gamma = solution(data, 'gamma')
 epsilon = solution(data, 'epsilon')
-submit(gamma * epsilon, part="a", day=DAY, year=YEAR)
+submit(gamma * epsilon, part='a', day=DAY, year=YEAR)
 
 
-# part a
+# part b
 def solution(data, rate):
     n = len(data[0])
     binary_result = ''
@@ -43,13 +43,13 @@ def solution(data, rate):
             if len(frequency) == 2 and frequency[0][1] == frequency[1][1]:
                 result = '1'  # handle tie
             else:
-                result = str(frequency[0][0]) # most frequent
+                result = str(frequency[0][0])  # most frequent
 
         elif rate.lower() == 'co2':
             if len(frequency) == 2 and frequency[0][1] == frequency[1][1]:
                 result = '0'  # handle tie
             else:
-                result = str(frequency[-1][0]) # least frequent
+                result = str(frequency[-1][0])  # least frequent
 
         binary_result += result
         data = [line for line in data if line[i] == result]
@@ -58,4 +58,4 @@ def solution(data, rate):
 
 oxy = solution(data, 'oxy')
 co2 = solution(data, 'co2')
-submit(oxy * co2, part="b", day=DAY, year=YEAR)
+submit(oxy * co2, part='b', day=DAY, year=YEAR)
