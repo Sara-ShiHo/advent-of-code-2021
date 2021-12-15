@@ -1,3 +1,7 @@
+"""Intuition for Day 04:
+For each call, replace corresponding numbers on the boards with 0
+assess whether any board has won by having a horizontal or vertical sum of 0
+"""
 from aocd import get_data
 from aocd.transforms import lines
 from aocd import submit
@@ -17,7 +21,7 @@ boards = []
 board = []
 for line in data[2:]:
     if line == '':
-        boards.append(np.array(board))
+        boards.append(board)
         board = []
     else:
         board.append([int(num) for num in line.split()])
@@ -31,23 +35,22 @@ for call in calls:
     assess = [(min(np.sum(board, axis=0)),
                min(np.sum(board, axis=1)))
               for board in boards]
-    winners = [(i, total)
-               for i, total in enumerate(assess)
+    winners = [i for i, total in enumerate(assess)
                if 0.0 in total]
 
     # one board has won (part a)
     if len(winners) == 1:
-        winning_board = boards[winners[0][0]].copy()
+        winning_board = boards[winners[0]].copy()
         winning_call = call
 
     # there is only one board left (part b). record who it is.
     if len(winners) == len(boards) - 1:
-        last_winner = [(i, total) for i, total in enumerate(assess)
+        last_winner = [i for i, total in enumerate(assess)
                        if 0.0 not in total]
 
     # there are no more boards left. record the last board's winning state.
     if len(winners) == len(boards):
-        last_board = boards[last_winner[0][0]].copy()
+        last_board = boards[last_winner[0]].copy()
         last_call = call
         break
 
