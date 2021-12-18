@@ -8,58 +8,50 @@ YEAR = 2021
 raw_data = get_data(day=DAY, year=YEAR)
 data = lines(raw_data)
 
-opening = list('{([<')
-closing = {'{': '}',
+OPENING = list('{([<')
+
+CLOSING = {'{': '}',
            '(': ')',
            '[': ']',
            '<': '>'}
 
 # part a
-scoring = {')': 3,
-           ']': 57,
-           '}': 1197,
-           '>': 25137}
-
-score = 0
-tracker = []
-corrupt_indices = []
-new_data = []
-for i, line in enumerate(data):
-    for char in line:
-        if char in opening:
-            tracker.append(char)
-        else:
-            if closing[tracker.pop(-1)] != char:
-                score += scoring[char]
-                corrupt_indices.append(i)
-                break
-# submit(score, part='a', day=DAY, year=YEAR)
-
+SCORING_A = {')': 3,
+             ']': 57,
+             '}': 1197,
+             '>': 25137}
 # part b
-scoring = {')': 1,
-           ']': 2,
-           '}': 3,
-           '>': 4}
+SCORING_B = {')': 1,
+             ']': 2,
+             '}': 3,
+             '>': 4}
 
-data = [line for i, line in enumerate(data) if i not in corrupt_indices].copy()
-scores = []
+score_a = 0
+line_scores = []
 for line in data:
-    items = list(line)
+    corrupt = False
     tracker = []
-    line_score = 0
-    while len(items) > 0:
-        char = items.pop(0)
-        if char in opening:
+    for char in list(line):
+        if char in OPENING:
             tracker.append(char)
-        else:
-            tracker.pop(-1)
-    while len(tracker) > 0:
-        line_score = line_score * 5 + scoring[closing[tracker.pop(-1)]]
-    scores.append(line_score)
-print(np.median(scores))
-# submit(np.median(scores), part='b', day=DAY, year=YEAR)
+        elif CLOSING[tracker.pop(-1)] != char:
+            score_a += SCORING_A[char]  # part a
+            corrupt = True
+            break
 
-# check
+    if not corrupt:  # part b
+        line_score = 0
+        while len(tracker) > 0:
+            line_score = line_score * 5 + SCORING_B[CLOSING[tracker.pop(-1)]]
+        line_scores.append(line_score)
+
+# submit(score_a, part='a', day=DAY, year=YEAR)
+
+score_b = sorted(line_scores)[len(line_scores) // 2]
+# submit(score, part='b', day=DAY, year=YEAR)
+
+
+# test
 scores = []
 for line in ['[({(<(())[]>[[{[]{<()<>>',
              '[(()[<>])]({[<{<<[]>>(',
@@ -71,11 +63,11 @@ for line in ['[({(<(())[]>[[{[]{<()<>>',
     line_score = 0
     while len(items) > 0:
         char = items.pop(0)
-        if char in opening:
+        if char in OPENING:
             tracker.append(char)
         else:
             tracker.pop(-1)
     while len(tracker) > 0:
-        line_score = line_score * 5 + scoring[closing[tracker.pop(-1)]]
+        line_score = line_score * 5 + SCORING_B[CLOSING[tracker.pop(-1)]]
     scores.append(line_score)
 print(np.median(scores))
