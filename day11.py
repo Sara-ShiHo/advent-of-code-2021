@@ -15,38 +15,38 @@ def inc_step(matrix):
     return matrix
 
 
-def inc_if(matrix, i, j):
+def inc_bounded(matrix, i, j):
     """helper function so that inc_neighbors doesn't go out of bounds"""
     if i >= 0 and i < len(matrix): 
         if j >= 0 and j < len(matrix[i]):
-            if matrix[i][j] != 0:
+            if matrix[i][j] != 0:  # don't increment if flashed
                 matrix[i][j] += 1
     return matrix
 
 
 def inc_neighbors(matrix, i, j):
     # top bottom
-    matrix = inc_if(matrix, i+1, j)
-    matrix = inc_if(matrix, i-1, j)
+    matrix = inc_bounded(matrix, i+1, j)
+    matrix = inc_bounded(matrix, i-1, j)
 
     # left right
-    matrix = inc_if(matrix, i, j-1)
-    matrix = inc_if(matrix, i, j+1)
+    matrix = inc_bounded(matrix, i, j-1)
+    matrix = inc_bounded(matrix, i, j+1)
 
     # diagonals
-    matrix = inc_if(matrix, i-1, j-1)
-    matrix = inc_if(matrix, i-1, j+1)
-    matrix = inc_if(matrix, i+1, j-1)
-    matrix = inc_if(matrix, i+1, j+1)
+    matrix = inc_bounded(matrix, i-1, j-1)
+    matrix = inc_bounded(matrix, i-1, j+1)
+    matrix = inc_bounded(matrix, i+1, j-1)
+    matrix = inc_bounded(matrix, i+1, j+1)
     return matrix
 
 
 def flash_step(matrix):
     matrix = np.array(matrix)
     while len(matrix[matrix > 9]) > 0:
-        # flash all octopuses greater than 9
-        xs, ys = np.where(matrix > 9)
-        for i, j in zip(xs, ys):
+        # locate and flash all octopuses greater than 9
+        rows, columns = np.where(matrix > 9)
+        for i, j in zip(rows, columns):
             matrix[i][j] = 0
             matrix = inc_neighbors(matrix, i, j)
     return matrix
@@ -65,7 +65,7 @@ YEAR = 2021
 
 raw_data = get_data(day=DAY, year=YEAR)
 
-# step 1:
+# part 1:
 data = [[int(digit) for digit in row] for row in raw_data.splitlines()]
 matrix = np.array(data)
 total_flashes = 0
@@ -78,7 +78,7 @@ print(total_flashes)
 flash_print(data)
 
 
-# step 2:
+# part 2:
 data = [[int(digit) for digit in row] for row in raw_data.splitlines()]
 matrix = np.array(data)
 step = 1
